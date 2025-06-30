@@ -37,16 +37,16 @@ app.post('/create-data-table', async (_, res) => {
 });
 
 app.post("/savedata", async (req, res) => {
-  const { nombre, matricula } = req.body;
+  const { nombre, value, matricula } = req.body;
 
-  if (!nombre || !matricula) {
-    return res.status(400).json({ error: "Los campos 'nombre' y 'matricula' son requeridos" });
+  if (!nombre || !value || !matricula) {
+    return res.status(400).json({ error: "Los campos 'nombre', 'value' y 'matricula' son requeridos" });
   }
 
   try {
     const result = await pool.query(
-      'INSERT INTO data (nombre, matricula) VALUES ($1, $2) RETURNING *',
-      [nombre, matricula]
+      'INSERT INTO data (nombre, value, matricula) VALUES ($1, $2, $3) RETURNING *',
+      [nombre, value, matricula]
     );
 
     return res
