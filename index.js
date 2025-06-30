@@ -21,6 +21,7 @@ app.post('/create-data-table', async (_, res) => {
       await pool.query(`
         CREATE TABLE ${tableName} (
           matricula SERIAL PRIMARY KEY,
+          value TEXT NOT NULL,
           nombre TEXT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
