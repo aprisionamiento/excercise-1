@@ -38,7 +38,7 @@ app.post('/create-data-table', async (_, res) => {
 });
 
 app.post("/savedata", async (req, res) => {
-  const { nombre, value, matricula } = req.body;
+  const { nombre, value, matricula, created_at } = req.body;
 
   if (!nombre || !value || !matricula) {
     return res.status(400).json({ error: "Los campos 'nombre', 'value' y 'matricula' son requeridos" });
@@ -46,8 +46,8 @@ app.post("/savedata", async (req, res) => {
 
   try {
     const result = await pool.query(
-      'INSERT INTO data (nombre, value, matricula) VALUES ($1, $2, $3) RETURNING *',
-      [nombre, value, matricula]
+      'INSERT INTO data (nombre, value, matricula, created_at) VALUES ($1, $2, $3, $4) RETURNING *',
+      [nombre, value, matricula, created_at || new Date().toISOString()] // Use current timestamp
     );
 
     return res
@@ -63,6 +63,22 @@ app.post("/savedata", async (req, res) => {
   }
 });
 
+app.get("/getdata", async (_, res) => {
+  const tableName = "data";
+  
+  try {
+    const result = await pool.query(`SELECT * FROM ${tableName} ORDER BY matricula DESC`);
+    
+    return res.status(200).json({ 
+      message: "✅ Datos obtenidos exitosamente",
+      data: result.rows,
+      total: result.rows.length
+    });
+  } catch (error) {
+    console.error("❌ Error:", error.message);
+    res.status(500).json({ error: "Error al obtener datos" });
+  }
+});
 
 app.post("/deletedata", async (_, res) => {
   const tableName = "data";
