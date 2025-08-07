@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.post('/create-data-table', async (_, res) => {
   try {
-    const tableName = 'data';
+    const tableName = 'device_logs';
 
     const checkTable = await pool.query(
       'SELECT to_regclass($1) AS exists',
@@ -19,12 +19,12 @@ app.post('/create-data-table', async (_, res) => {
 
     if (!checkTable.rows[0].exists) {
       await pool.query(`
-        CREATE TABLE ${tableName} (
-          matricula SERIAL PRIMARY KEY,
-          value TEXT NOT NULL,
-          nombre TEXT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+       CREATE TABLE device_logs (
+        id SERIAL PRIMARY KEY,
+        action VARCHAR(50) NOT NULL,
+        "user" TEXT NOT NULL,
+        enroll_id TEXT NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
       `);
 
       return res.status(201).json({ message: 'Tabla creada exitosamente' });
