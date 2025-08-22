@@ -37,7 +37,7 @@ app.post('/create-data-table', async (_, res) => {
   }
 });
 
-app.post("/turn-on", async (req, res) => {
+/*app.post("/turn-on", async (req, res) => {
   const { user, enrollId } = req.body;
   const deviceStatus = {};
   deviceStatus.isOn = true;
@@ -57,7 +57,7 @@ app.post("/turn-on", async (req, res) => {
     return res.status(500).json({ error: "Error al guardar log" });
   }
 });
-
+*/
 app.post("/savedata", async (req, res) => {
   const { nombre, value, matricula, created_at } = req.body;
 
